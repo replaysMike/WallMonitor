@@ -56,12 +56,12 @@ There are many built-in monitors that come with SystemMonitor. If you feel an im
 * Memory
 * Disk
 
-## Planned Features for 2023
+## Remaining Upcoming Features for 2023
 
-[ ] PRTG Integration
-[ ] Custom sprite loading for your own look
-[ ] SNMP Trap Receiving
-[ ] Enhanced full screen animations
-[ ] Failover monitoring
+- [ ] PRTG Integration
+- [ ] Custom sprite loading for your own look
+- [ ] SNMP Trap Receiving
+- [ ] Enhanced full screen animations
+- [ ] Failover monitoring
 
 For more information about getting started and configuring, see the [Wiki](https://github.com/replaysMike/SystemMonitor/wiki)
