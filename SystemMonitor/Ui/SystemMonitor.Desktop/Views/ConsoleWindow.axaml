@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SystemMonitor.Desktop.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+             x:Class="SystemMonitor.Desktop.Views.ConsoleWindow">
+  <Design.DataContext>
+    <viewModels:ConsoleWindowModel/>
+  </Design.DataContext>
+  <Border  Background="Black" Opacity="0.85">
+    <Border BorderBrush="Lime" BorderThickness="1" Opacity="1">
+      <Border.Styles>
+        <Style Selector="SelectableTextBlock">
+          <Setter Property="FontSize" Value="10" />
+          <Setter Property="Foreground" Value="#aaa" />
+        </Style>
+        <Style Selector="TextBox">
+          <Setter Property="FontSize" Value="12" />
+          <Setter Property="Foreground" Value="Lime" />
+          <Setter Property="BorderBrush" Value="Green" />
+        </Style>
+        <Style Selector="TextBox:focus">
+          <Setter Property="BorderBrush" Value="Yellow" />
+        </Style>
+      </Border.Styles>
+      <Grid RowDefinitions="15, *, 25">
+        <TextBlock Grid.Row="0" Background="#004400" Foreground="Lime" Padding="5 0 0 0" FontWeight="Bold">Command Console</TextBlock>
+        <ScrollViewer 
+          Grid.Row="1" 
+          Name="ScrollWindow"
+          VerticalScrollBarVisibility="Visible" 
+          HorizontalScrollBarVisibility="Hidden"
+          IsScrollInertiaEnabled="True"
+          AllowAutoHide="False">
+          <SelectableTextBlock
+            Name="History1"
+            Text="{Binding Text}"
+            Background="Transparent" 
+            Margin="0" 
+            Padding="2" 
+            MaxLines="500"
+            Focusable="False"
+            TextWrapping="Wrap"
+            FontFamily="resm:SystemMonitor.Desktop.Assets.Fonts.SourceCodePro-Regular.ttf?assembly=SystemMonitor.Desktop#Source Code Pro"
+          />
+        </ScrollViewer>
+        <TextBox 
+          Grid.Row="2" 
+          Name="Input1" 
+          Padding="2" 
+          BorderBrush="Green" 
+          BorderThickness="1" 
+          CaretBrush="Lime" 
+          CornerRadius="0" 
+          MaxLines="1" 
+          Focusable="True"
+          TabIndex="0"
+          Foreground="Lime"
+        />
+      </Grid>
+    </Border>
+  </Border>
+</UserControl>

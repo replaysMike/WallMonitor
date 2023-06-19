@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers>win10-x64;linux-arm;linux-arm64;linux-x64;osx.10.12-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Remove="Assets\Fonts\BebasNeue.ttf" />
+    <AvaloniaResource Remove="Assets\Fonts\Roboto-Bold.ttf" />
+    <AvaloniaResource Remove="Assets\Fonts\Roboto-Light.ttf" />
+    <AvaloniaResource Remove="Assets\Fonts\SourceCodePro-Regular.ttf" />
+    <AvaloniaResource Remove="Assets\icon-gray.png" />
+    <AvaloniaResource Remove="Assets\icon-green.png" />
+    <AvaloniaResource Remove="Assets\icon-red.png" />
+    <AvaloniaResource Remove="Assets\icon.png" />
+    <None Remove=".gitignore" />
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
+    <None Remove="Assets\BebasNeue.ttf" />
+    <None Remove="Assets\Fonts\Roboto-Bold.ttf" />
+    <None Remove="Assets\Fonts\Roboto-Light.ttf" />
+    <None Remove="Assets\SourceCodePro-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Assets\icon.ico" />
+    <EmbeddedResource Include="Assets\Fonts\BebasNeue.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\Fonts\Roboto-Bold.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\Roboto-Light.ttf" />
+    <EmbeddedResource Include="Assets\Fonts\SourceCodePro-Regular.ttf" />
+    <EmbeddedResource Include="Assets\icon-gray.png" />
+    <EmbeddedResource Include="Assets\icon-green.png" />
+    <EmbeddedResource Include="Assets\icon-red.png" />
+    <EmbeddedResource Include="Assets\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TrimmerRootDescriptor Include="Roots.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.0-preview8" />
+    <PackageReference Include="Avalonia.BuildServices" Version="0.0.12" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview8" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview8" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview8" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview8" />
+    <PackageReference Include="LibVLCSharp" Version="3.7.0" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.18" />
+    <PackageReference Include="LightInject" Version="6.6.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\SystemMonitor.Common\SystemMonitor.Common.csproj" />
+    <ProjectReference Include="..\..\Resources\SystemMonitor.Resources\SystemMonitor.Resources.csproj" />
+  </ItemGroup>
+</Project>

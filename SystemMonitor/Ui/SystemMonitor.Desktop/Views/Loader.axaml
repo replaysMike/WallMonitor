@@ -1,0 +1,140 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:SystemMonitor.Desktop.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SystemMonitor.Desktop.Views.Loader">
+  <UserControl.Styles>
+    <Style Selector="Image.Anim1">
+      <Style.Animations>
+        <Animation Duration="0:0:5" 
+                   IterationCount="INFINITE"
+                   FillMode="None"
+                   PlaybackDirection="AlternateReverse"
+                   Easing="SineEaseInOut">
+          <KeyFrame Cue="0%">
+            <Setter Property="RotateTransform.Angle" Value="0.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="0.97"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="0.98"/>
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="RotateTransform.Angle" Value="180.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="1.0"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="1.0"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="RotateTransform.Angle" Value="360.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="1.09"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="1.02"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Image.Anim2">
+      <Style.Animations>
+        <Animation Duration="0:0:4" 
+                   IterationCount="INFINITE"
+                   FillMode="None"
+                   PlaybackDirection="AlternateReverse"
+                   Easing="SineEaseInOut">
+          <KeyFrame Cue="0%">
+            <Setter Property="RotateTransform.Angle" Value="0.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="0.96"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="0.99"/>
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="RotateTransform.Angle" Value="120.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="0.99"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="1.01"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="RotateTransform.Angle" Value="320.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="1.05"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="1.03"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Image.Anim3">
+      <Style.Animations>
+        <Animation Duration="0:0:5" 
+                   IterationCount="INFINITE"
+                   FillMode="None"
+                   PlaybackDirection="AlternateReverse"
+                   Easing="SineEaseInOut">
+          <KeyFrame Cue="0%">
+            <Setter Property="RotateTransform.Angle" Value="30.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="0.9"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="0.92"/>
+          </KeyFrame>
+          <KeyFrame Cue="50%">
+            <Setter Property="RotateTransform.Angle" Value="220.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="0.96"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="0.94"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="RotateTransform.Angle" Value="340.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="1.03"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="0.98"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Image.Anim4">
+      <Style.Animations>
+        <Animation Duration="0:0:20" 
+                   IterationCount="INFINITE"
+                   FillMode="None"
+                   PlaybackDirection="AlternateReverse"
+                   Easing="SineEaseInOut">
+          <KeyFrame Cue="0%">
+            <Setter Property="RotateTransform.Angle" Value="0.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="1"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="1"/>
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="RotateTransform.Angle" Value="360.0"/>
+            <Setter Property="ScaleTransform.ScaleY" Value="1.1"/>
+            <Setter Property="ScaleTransform.ScaleX" Value="1.05"/>
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </UserControl.Styles>
+  <Panel>
+    <Image Classes="Anim1" Source="resm:SystemMonitor.Resources.InternalResources.Sprites._4k.loader_hacker_1.png?assembly=SystemMonitor.Resources">
+      <Image.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="1" ScaleY="1" />
+          <RotateTransform Angle="0" />
+        </TransformGroup>
+      </Image.RenderTransform>
+    </Image>
+    <Image Classes="Anim2" Source="resm:SystemMonitor.Resources.InternalResources.Sprites._4k.loader_hacker_2.png?assembly=SystemMonitor.Resources">
+      <Image.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="1" ScaleY="1" />
+          <RotateTransform Angle="60" />
+        </TransformGroup>
+      </Image.RenderTransform>
+    </Image>
+    <Image Classes="Anim3" Source="resm:SystemMonitor.Resources.InternalResources.Sprites._4k.loader_hacker_3.png?assembly=SystemMonitor.Resources">
+      <Image.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="1" ScaleY="1" />
+          <RotateTransform Angle="90" />
+        </TransformGroup>
+      </Image.RenderTransform>
+    </Image>
+    <Image Classes="Anim4" Source="resm:SystemMonitor.Resources.InternalResources.Sprites._4k.loader4.png?assembly=SystemMonitor.Resources">
+      <Image.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="1" ScaleY="1" />
+          <RotateTransform Angle="120" />
+        </TransformGroup>
+      </Image.RenderTransform>
+    </Image>
+    <TextBlock Text="{Binding Text}" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+  </Panel>
+</UserControl>

@@ -1,0 +1,113 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RuntimeIdentifiers>win10-x64;linux-arm;linux-arm64;linux-x64;osx.10.12-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="InternalResources\Backgrounds\4k\blue_bottom.png" />
+    <None Remove="InternalResources\Backgrounds\4k\red_bottom.png" />
+    <None Remove="InternalResources\Backgrounds\4k\serverdashboard_bg.jpg" />
+    <None Remove="InternalResources\Backgrounds\4k\serverdashboard_bg2.jpg" />
+    <None Remove="InternalResources\Backgrounds\4k\__style.jpg" />
+    <None Remove="InternalResources\Sounds\cancel.wav" />
+    <None Remove="InternalResources\Sounds\click.wav" />
+    <None Remove="InternalResources\Sounds\hover.wav" />
+    <None Remove="InternalResources\Sounds\message.wav" />
+    <None Remove="InternalResources\Sounds\server_down1.wav" />
+    <None Remove="InternalResources\Sounds\server_down2.wav" />
+    <None Remove="InternalResources\Sounds\server_down3.wav" />
+    <None Remove="InternalResources\Sounds\server_down4.wav" />
+    <None Remove="InternalResources\Sounds\server_up1.wav" />
+    <None Remove="InternalResources\Sprites\4k\alert_bg.png" />
+    <None Remove="InternalResources\Sprites\4k\alert_green.png" />
+    <None Remove="InternalResources\Sprites\4k\alert_red.png" />
+    <None Remove="InternalResources\Sprites\4k\audio_button.png" />
+    <None Remove="InternalResources\Sprites\4k\audio_button_muted.png" />
+    <None Remove="InternalResources\Sprites\4k\button_red.png" />
+    <None Remove="InternalResources\Sprites\4k\button_white.png" />
+    <None Remove="InternalResources\Sprites\4k\icon_down.png" />
+    <None Remove="InternalResources\Sprites\4k\icon_unknown.png" />
+    <None Remove="InternalResources\Sprites\4k\loader1.png" />
+    <None Remove="InternalResources\Sprites\4k\loader2.png" />
+    <None Remove="InternalResources\Sprites\4k\loader3.png" />
+    <None Remove="InternalResources\Sprites\4k\loader4.png" />
+    <None Remove="InternalResources\Sprites\4k\loader_hacker_1.png" />
+    <None Remove="InternalResources\Sprites\4k\loader_hacker_2.png" />
+    <None Remove="InternalResources\Sprites\4k\loader_hacker_3.png" />
+    <None Remove="InternalResources\Sprites\4k\server1u.png" />
+    <None Remove="InternalResources\Sprites\4k\server1u_1.png" />
+    <None Remove="InternalResources\Sprites\4k\server1u_2.png" />
+    <None Remove="InternalResources\Sprites\4k\server1u_3.png" />
+    <None Remove="InternalResources\Sprites\4k\server1u_4.png" />
+    <None Remove="InternalResources\Sprites\4k\server2u.png" />
+    <None Remove="InternalResources\Sprites\4k\server2u_1.png" />
+    <None Remove="InternalResources\Sprites\4k\server2u_2.png" />
+    <None Remove="InternalResources\Sprites\4k\server2u_3.png" />
+    <None Remove="InternalResources\Sprites\4k\server2u_4.png" />
+    <None Remove="InternalResources\Sprites\4k\server3u.png" />
+    <None Remove="InternalResources\Sprites\4k\server3u_1.png" />
+    <None Remove="InternalResources\Sprites\4k\server3u_2.png" />
+    <None Remove="InternalResources\Sprites\4k\server3u_3.png" />
+    <None Remove="InternalResources\Sprites\4k\server3u_4.png" />
+    <None Remove="InternalResources\Sprites\4k\server_sick.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="InternalResources\Backgrounds\4k\blue_bottom.png" />
+    <EmbeddedResource Include="InternalResources\Backgrounds\4k\red_bottom.png" />
+    <EmbeddedResource Include="InternalResources\Backgrounds\4k\serverdashboard_bg.jpg" />
+    <EmbeddedResource Include="InternalResources\Backgrounds\4k\serverdashboard_bg2.jpg" />
+    <EmbeddedResource Include="InternalResources\Backgrounds\4k\__style.jpg" />
+    <EmbeddedResource Include="InternalResources\Sounds\cancel.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\click.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\hover.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\message.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\server_down1.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\server_down2.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\server_down3.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\server_down4.wav" />
+    <EmbeddedResource Include="InternalResources\Sounds\server_up1.wav" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\alert_bg.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\alert_green.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\alert_red.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\audio_button.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\audio_button_muted.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\button_red.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\button_white.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\icon_down.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader1.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader2.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader3.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader4.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader_hacker_1.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader_hacker_2.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\loader_hacker_3.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server1u_1.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server1u_2.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server1u_3.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server1u_4.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server2u_1.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server2u_2.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server2u_3.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server2u_4.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server3u_1.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server3u_2.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server3u_3.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server3u_4.png" />
+    <EmbeddedResource Include="InternalResources\Sprites\4k\server_sick.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="InternalResources\Sprites\4k\icon_unknown.png" />
+  </ItemGroup>
+
+</Project>
