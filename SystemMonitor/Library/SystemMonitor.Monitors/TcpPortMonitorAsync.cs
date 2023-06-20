@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using SystemMonitor.Common;
 using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
@@ -14,6 +13,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class TcpPortMonitorAsync : IMonitorAsync
     {
+        public const int DefaultTimeoutMilliseconds = 1000;
         public MonitorCategory Category => MonitorCategory.Protocol;
         public int Port { get; set; }
         public string PortName => Util.GetWellKnownPortName(Port);
@@ -23,7 +23,7 @@ namespace SystemMonitor.Monitors
 
         public string DisplayName => $"TCP-{PortName}";
         public int MonitorId { get; set; }
-        public long TimeoutMilliseconds { get; set; }
+        public long TimeoutMilliseconds { get; set; } = DefaultTimeoutMilliseconds;
         public string ConfigurationDescription => $"Host: {Host} ({HostAddress})\r\nTCP Port: {PortName} ({Port})";
         public string? Host { get; set; }
         public IPAddress HostAddress { get; set; }
@@ -38,8 +38,6 @@ namespace SystemMonitor.Monitors
         public async Task<IHostResponse> CheckHostAsync(IHost host, IConfigurationParameters parameters, System.Threading.CancellationToken cancelToken)
         {
             Iteration++;
-            if (TimeoutMilliseconds <= 0)
-                TimeoutMilliseconds = 1000;
             var response = HostResponse.Create();
             response.Units = Units.Value;
             response.Range = "1-65535";
@@ -60,6 +58,7 @@ namespace SystemMonitor.Monitors
                             Port = Util.GetPortFromWellKnown(portStr);
                         }
                     }
+                    TimeoutMilliseconds = parameters.Get<int>("TimeoutMilliseconds", DefaultTimeoutMilliseconds);
                 }
 
                 // if a proper port number was found, proceed
@@ -113,6 +112,7 @@ namespace SystemMonitor.Monitors
         private class ConfigurationContract
         {
             public int? Port { get; set; } = 25;
+            public int? TimeoutMilliseconds { get; set; } = DefaultTimeoutMilliseconds;
         }
     }
 }
