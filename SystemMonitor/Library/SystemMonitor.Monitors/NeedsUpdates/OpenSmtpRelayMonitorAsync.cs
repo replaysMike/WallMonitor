@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors.NeedsUpdates
@@ -10,6 +12,7 @@ namespace SystemMonitor.Monitors.NeedsUpdates
     /// </summary>
     public class OpenSmtpRelayMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "SMTP Open Relay";
         public string ServiceDescription => "Monitors SMTP open relay status.";
         public int Iteration { get; private set; }
@@ -46,6 +49,13 @@ namespace SystemMonitor.Monitors.NeedsUpdates
                 response.IsUp = false;
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
         }
 
         public void Dispose()

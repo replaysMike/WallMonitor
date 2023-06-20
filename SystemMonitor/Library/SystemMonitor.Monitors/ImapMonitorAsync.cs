@@ -1,17 +1,21 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public class ImapMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 993;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "IMAP";
         public string ServiceDescription => "Monitors IMAP email service availability.";
         public int Iteration { get; private set; }
@@ -57,12 +61,12 @@ namespace SystemMonitor.Monitors
                 {
                     if (parameters.Any())
                     {
-                        var port = parameters.Get<int>("Port", 993);
+                        var port = parameters.Get<int>("Port", DefaultPort);
                         var username = parameters.Get<string>("Username");
                         var password = parameters.Get<string>("Password");
                         Username = username;
-                        AllowAnyCertificate = parameters.Get<bool>("AllowAnyCertificate");
-                        AllowNameMismatch = parameters.Get<bool>("AllowNameMismatch");
+                        AllowAnyCertificate = parameters.Get<bool>("AllowAnyCertificate", true);
+                        AllowNameMismatch = parameters.Get<bool>("AllowNameMismatch", true);
                         var protocolStr = parameters.Get<string>("Protocol");
                         Protocol = SslProtocols.Tls12;
                         if (!string.IsNullOrEmpty(protocolStr))
@@ -73,7 +77,7 @@ namespace SystemMonitor.Monitors
 
                         // initiate connection
                         socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        var result = socket.BeginConnect(address, port > 0 ? port : 993, null, null);
+                        var result = socket.BeginConnect(address, port > 0 ? port : DefaultPort, null, null);
                         var complete = result.AsyncWaitHandle.WaitOne((int)TimeoutMilliseconds, true);
                         if (complete && socket.Connected)
                         {
@@ -232,6 +236,19 @@ namespace SystemMonitor.Monitors
                 throw new ApplicationException(ex.Message);
             }
             return sb.ToString();
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public int? Port { get; set; } = DefaultPort;
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public bool AllowAnyCertificate { get; set; } = true;
+            public bool AllowNameMismatch { get; set; } = true;
+            public SslProtocols Protocol { get; set; } = SslProtocols.Tls12;
         }
 
         private void ReceiveCallback(IAsyncResult result)

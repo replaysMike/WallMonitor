@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Logging;
 using System.Management;
 using System.Net;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 using EnumerationOptions = System.Management.EnumerationOptions;
 
@@ -13,6 +15,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class WmiMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Windows;
         public string ServiceName => "WMI Query";
         public string ServiceDescription => "Monitors WMI (Windows Management Instrumentation) query response.";
         public int Iteration { get; private set; }
@@ -51,7 +54,6 @@ namespace SystemMonitor.Monitors
             {
                 var startTime = DateTime.UtcNow;
                 var wmiQuery = "";
-                var matchResponse = "";
                 var username = "";
                 var password = "";
                 var domain = "";
@@ -63,8 +65,6 @@ namespace SystemMonitor.Monitors
                 if (parameters.Any())
                 {
                     wmiQuery = parameters.Get("Query");
-                    if (parameters.Contains("MatchResponse"))
-                        matchResponse = parameters.Get("MatchResponse");
                     if (parameters.Contains("Username"))
                         username = parameters.Get("Username");
                     if (parameters.Contains("Password"))
@@ -76,9 +76,7 @@ namespace SystemMonitor.Monitors
                     if (parameters.Contains("Scale"))
                         scale = parameters.Get("Scale");
                     if (parameters.Contains("Units"))
-                    {
                         units = parameters.Get<Units>("Units");
-                    }
                 }
 
 
@@ -144,7 +142,7 @@ namespace SystemMonitor.Monitors
                                     }
                                     else
                                     {
-                                        response.IsUp = MatchComparer.Compare("Value", matchResponse, "Count", resultCount, matchType);
+                                        response.IsUp = MatchComparer.Compare("Value", valAsStr, "Count", resultCount, matchType);
                                         if (matchType.Contains("Count", StringComparison.InvariantCultureIgnoreCase))
                                             response.Value = resultCount;
                                     }
@@ -167,7 +165,22 @@ namespace SystemMonitor.Monitors
                 response.IsUp = false;
             }
             return response;
+        }
 
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Query { get; set; }
+            public string? MatchResponse { get; set; }
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public string? Domain { get; set; }
+            public double? Scale { get; set; }
+            public Units? Units { get; set; }
+            [MatchTypeVariables("Value")]
+            public string? MatchType { get; set; }
         }
     }
 }

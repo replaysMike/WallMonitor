@@ -126,7 +126,7 @@ namespace SystemMonitor.Common.IO
             writer.Seek(LengthBytePosition, SeekOrigin.Begin);
             writer.Write((ushort)stream.Length);
 
-            Debug.WriteLine($"Sending message type {messageTypeByte} ({stream.Length} length)");
+            //Debug.WriteLine($"Sending message type {messageTypeByte} ({stream.Length} length)");
             var bytes = stream.ToArray();
             await SendAsync(bytes);
         }
@@ -194,7 +194,7 @@ namespace SystemMonitor.Common.IO
             writer.Seek(LengthBytePosition, SeekOrigin.Begin);
             writer.Write((ushort)stream.Length);
 
-            Debug.WriteLine($"Sending message type {messageTypeByte}");
+            //Debug.WriteLine($"Sending message type {messageTypeByte}");
             var bytes = stream.ToArray();
             await SendAsync(bytes);
         }

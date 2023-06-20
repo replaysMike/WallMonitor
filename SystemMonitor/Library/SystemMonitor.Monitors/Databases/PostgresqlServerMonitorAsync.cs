@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Npgsql;
 using System.Data;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
@@ -11,6 +13,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public class PostgresqlServerMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Database;
         private string Database { get; set; } = string.Empty;
         private string? ServerVersion { get; set; }
         public string ServiceName => "Postgresql";
@@ -127,6 +130,17 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? ConnectionString { get; set; }
+            public string? Query { get; set; }
+            [MatchTypeVariables("Value", "Count")]
+            public string? MatchType { get; set; }
         }
 
         public void Dispose()

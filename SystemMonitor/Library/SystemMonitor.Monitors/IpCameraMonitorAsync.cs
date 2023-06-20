@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Buffers.Text;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
-using System.Text.Encodings.Web;
 using SystemMonitor.Common;
 using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
@@ -15,6 +13,8 @@ namespace SystemMonitor.Monitors
 {
     public sealed class IpCameraMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 554;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "IpCamera";
         public string ServiceDescription => "Monitors an IpCamera stream state.";
         public int Iteration { get; private set; }
@@ -58,7 +58,7 @@ namespace SystemMonitor.Monitors
             var startTime = DateTime.UtcNow;
             // default ports:
             // RTSP=554, SIP=5060/5061
-            var port = 554;
+            var port = DefaultPort;
             var username = "";
             var password = "";
             var uriStr = "";
@@ -106,7 +106,7 @@ namespace SystemMonitor.Monitors
                         {
                             case VideoProtocols.Rtsp:
                                 {
-                                    port = parameters.Get<int>("port", 554);
+                                    port = parameters.Get<int>("Port", DefaultPort);
                                     var uri = $"rtsp://{host.Hostname?.OriginalString ?? ipAddress.ToString()}:{port}";
                                     var sent = SendRtspOptions(socket, uri);
                                     var message = ReceiveRtspMessage(socket, out var responseCode);
@@ -158,7 +158,7 @@ namespace SystemMonitor.Monitors
                                 }
                             case VideoProtocols.Sip:
                                 {
-                                    port = parameters.Get<int>("port", 5060);
+                                    port = parameters.Get<int>("Port", 5060);
                                     var uri = $"rtsp://{host.Hostname?.OriginalString ?? ipAddress.ToString()}:{port}";
                                     var sent = SendSipOptions(socket, uri);
                                     var message = ReceiveSipMessage(socket, out var responseCode);
@@ -175,7 +175,7 @@ namespace SystemMonitor.Monitors
                                 {
                                     // MQTT: http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/MQTT_V3.1_Protocol_Specific.pdf
                                     // http://www.steves-internet-guide.com/mqtt-protocol-messages-overview/
-                                    port = parameters.Get<int>("port", 1883); // encrypted port number: 8883
+                                    port = parameters.Get<int>("Port", 1883); // encrypted port number: 8883
                                     break;
                                 }
                         }
@@ -198,6 +198,19 @@ namespace SystemMonitor.Monitors
                 socket?.Dispose();
             }
             return Task.FromResult(response);
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Uri { get; set; }
+            public int? Port { get; set; } = DefaultPort;
+            public VideoProtocols? Protocol { get; set; } = VideoProtocols.Rtsp;
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public string? UserAgent { get; set; }
         }
 
         private string GetQuotedChunk(string str, string chunkName)
@@ -225,7 +238,7 @@ namespace SystemMonitor.Monitors
                 var responseCodeStr = line1.Substring(soc, 3);
                 if (int.TryParse(responseCodeStr, out responseCode))
                 {
-                    Debug.WriteLine($"RX: {responseMessage}");
+                    //Debug.WriteLine($"RX: {responseMessage}");
                     return responseMessage;
                 }
             }
@@ -249,7 +262,7 @@ namespace SystemMonitor.Monitors
                 var responseCodeStr = line1.Substring(soc, 3);
                 if (int.TryParse(responseCodeStr, out responseCode))
                 {
-                    Debug.WriteLine($"RX: {responseMessage}");
+                    //Debug.WriteLine($"RX: {responseMessage}");
                     return responseMessage;
                 }
             }
@@ -274,7 +287,7 @@ namespace SystemMonitor.Monitors
                 request += $"response=\"{response}\"\r\n";
             }
             request += $"\r\n";
-            Debug.WriteLine(request);
+            //Debug.WriteLine(request);
             var buffer = Encoding.Default.GetBytes(request);
             return socket.Send(buffer);
         }
@@ -294,7 +307,7 @@ namespace SystemMonitor.Monitors
             request += $"Accept: application/sdp\r\n";
             request += $"Content-Length: 0\r\n";
             request += $"\r\n";
-            Debug.WriteLine(request);
+            //Debug.WriteLine(request);
             var buffer = Encoding.Default.GetBytes(request);
             return socket.Send(buffer);
         }

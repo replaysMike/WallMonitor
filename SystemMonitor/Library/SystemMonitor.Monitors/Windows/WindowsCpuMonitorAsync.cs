@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Logging;
 using System.Management;
 using System.Net;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 using EnumerationOptions = System.Management.EnumerationOptions;
 
@@ -14,6 +16,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class WindowsCpuMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Windows;
         public string ServiceName => "CPU";
         public string ServiceDescription => "Monitors CPU usage";
         public int Iteration { get; private set; }
@@ -56,7 +59,7 @@ namespace SystemMonitor.Monitors
                 var username = "";
                 var password = "";
                 var domain = "";
-                var matchType = "Value > 0.8";
+                var matchType = "Value < 0.8";
                 var sampleMode = SampleMode.Average;
 
                 // Load monitor configuration parameters
@@ -153,6 +156,19 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public string? Domain { get; set; }
+            public string? SampleMode { get; set; }
+            [MatchTypeVariables("Value")]
+            public string? MatchType { get; set; }
         }
 
         private class Core

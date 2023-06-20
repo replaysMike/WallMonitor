@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
@@ -10,6 +12,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public class AgentMonitorAsync : IMonitorAsync, IAgentMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Special;
         public string ServiceName => "Agent";
         public string ServiceDescription => "Monitors multiple hardware instruments via the remote Agent service";
         public int Iteration { get; private set; }
@@ -178,5 +181,15 @@ namespace SystemMonitor.Monitors
             return response;
         }
 
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Instrument { get; set; }
+            public string? Argument { get; set; }
+            public string? Range { get; set; }
+            public Units? Units { get; set; }
+        }
     }
 }

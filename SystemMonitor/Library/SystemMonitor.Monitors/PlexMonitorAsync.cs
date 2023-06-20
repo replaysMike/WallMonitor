@@ -1,14 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Text;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public sealed class PlexMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 32400;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "Plex";
         public string ServiceDescription => "Monitors Plex service response.";
         public int Iteration { get; private set; }
@@ -44,7 +48,7 @@ namespace SystemMonitor.Monitors
                 TimeoutMilliseconds = 5000;
             var response = HostResponse.Create();
             var startTime = DateTime.UtcNow;
-            var port = 32400;
+            var port = DefaultPort;
             try
             {
                 HostUrl = host.Hostname;
@@ -52,7 +56,7 @@ namespace SystemMonitor.Monitors
                 {
                     if (HostUrl == null && parameters.Contains("Url"))
                         HostUrl = new Uri(parameters.Get("Url"));
-                    port = parameters.Get<int>("port", 32400);
+                    port = parameters.Get<int>("port", DefaultPort);
                     var headers = parameters.Get("Headers");
                     if (headers != null)
                     {
@@ -79,7 +83,7 @@ namespace SystemMonitor.Monitors
                 {
                     var isSuccessful = false;
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    var result = socket.BeginConnect(ipAddress, port > 0 ? port : 80, null, null);
+                    var result = socket.BeginConnect(ipAddress, port > 0 ? port : DefaultPort, null, null);
                     var complete = result.AsyncWaitHandle.WaitOne((int)TimeoutMilliseconds, true);
                     if (complete && socket.Connected)
                     {
@@ -148,6 +152,17 @@ namespace SystemMonitor.Monitors
                 response.IsUp = false;
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Url { get; set; }
+            public int? Port { get; set; } = DefaultPort;
+            public Dictionary<string, string>? Headers { get; set; }
+            public string? Body { get; set; }
         }
 
         private void ReceiveCallback(IAsyncResult result)

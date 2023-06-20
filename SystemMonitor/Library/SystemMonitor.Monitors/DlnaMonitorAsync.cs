@@ -1,15 +1,19 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public sealed class DlnaMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 32469;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "DLNA/UPnP";
         public string ServiceDescription => "Monitors DLNA/UPnP server response.";
         public int Iteration { get; private set; }
@@ -20,10 +24,6 @@ namespace SystemMonitor.Monitors
         public string Host { get; set; } = string.Empty;
         public GraphType GraphType => GraphType.ResponseTime;
 
-        /// <summary>
-        /// True to force resolving of the Url instead of using the IP of the server
-        /// </summary>
-        public bool ResolveUrl { get; set; }
         public string Method { get; set; } = "GET";
         public Dictionary<string, string> Headers { get; set; } = new();
         public string? Body { get; set; }
@@ -49,13 +49,15 @@ namespace SystemMonitor.Monitors
                 TimeoutMilliseconds = 5000;
             var response = HostResponse.Create();
             var startTime = DateTime.UtcNow;
-            var port = 32469;
+            var port = DefaultPort;
+            Uri? hostUrl = null;
             try
             {
                 if (parameters.Any())
                 {
-                    port = parameters.Get<int>("port", 32469);
-                    ResolveUrl = parameters.Get<bool>("ResolveUrl");
+                    if (parameters.Contains("Url"))
+                        hostUrl = new Uri(parameters.Get("Url"));
+                    port = parameters.Get<int>("Port", DefaultPort);
                     if (parameters.Contains("Method"))
                         Method = parameters.Get<string>("Method");
                     if (parameters.Contains("UserAgent"))
@@ -79,6 +81,8 @@ namespace SystemMonitor.Monitors
                 }
 
                 var ipAddress = host.Ip ?? Util.HostToIp(host);
+                if (hostUrl != null)
+                    ipAddress = Util.GetIpFromHostname(hostUrl);
 
                 if (!Equals(ipAddress, IPAddress.None))
                 {
@@ -90,7 +94,7 @@ namespace SystemMonitor.Monitors
                     {
                         // connected! ask for a page
                         var header = $"{Method} /DeviceDescription.xml HTTP/1.1\r\n";
-                        header += $"Host: {host.Hostname?.OriginalString ?? ipAddress.ToString()}:{port}\r\n";
+                        header += $"Host: {hostUrl?.OriginalString ?? ipAddress.ToString()}:{port}\r\n";
                         //header += $"Content-Type: text/xml; charset=\"utf-8\"\r\n";
                         //header += $"Content-Length: {Body?.Length ?? 0}\r\n";
                         //header += "Date: Sat, 17 Jun 2023 02:25:36 GMT";
@@ -158,6 +162,19 @@ namespace SystemMonitor.Monitors
                 response.IsUp = false;
             }
             return Task.FromResult(response);
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Url { get; set; }
+            public int? Port { get; set; } = DefaultPort;
+            public string? Method { get; set; }
+            public string? UserAgent { get; set; }
+            public string? Body { get; set; }
+            public Dictionary<string, string>? Headers { get; set; }
         }
 
         private void ReceiveCallback(IAsyncResult result)

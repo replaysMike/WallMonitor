@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
@@ -11,8 +13,9 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class ProcessMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "Process";
-        public string ServiceDescription => "Monitors process existence.";
+        public string ServiceDescription => "Monitors existence of a running process executable";
         public int Iteration { get; private set; }
 
         public string DisplayName => ProcessName;
@@ -68,6 +71,16 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Process { get; set; }
+            [MatchTypeVariables("Value", "Threads")]
+            public string? MatchType { get; set; }
         }
     }
 }

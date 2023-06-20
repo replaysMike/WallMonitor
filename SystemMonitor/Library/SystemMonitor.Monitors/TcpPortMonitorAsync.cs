@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
@@ -11,10 +14,11 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class TcpPortMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Protocol;
         public int Port { get; set; }
         public string PortName => Util.GetWellKnownPortName(Port);
         public string ServiceName => "TCP Port";
-        public string ServiceDescription => "Monitors TCP Port accessibility.";
+        public string ServiceDescription => "Monitors that a specified TCP port is open.";
         public int Iteration { get; private set; }
 
         public string DisplayName => $"TCP-{PortName}";
@@ -98,9 +102,17 @@ namespace SystemMonitor.Monitors
             return response;
         }
 
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
         public void Dispose()
         {
 
+        }
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public int? Port { get; set; } = 25;
         }
     }
 }

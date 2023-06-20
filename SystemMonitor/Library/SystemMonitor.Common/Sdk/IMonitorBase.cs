@@ -1,7 +1,11 @@
-﻿namespace SystemMonitor.Common.Sdk
+﻿using SystemMonitor.Common.Models;
+
+namespace SystemMonitor.Common.Sdk
 {
     public interface IMonitorBase
     {
+        MonitorCategory Category { get; }
+
         /// <summary>
         /// Unique monitor Id
         /// </summary>

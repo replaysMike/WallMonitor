@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
 using SystemMonitor.Common.Models;
@@ -11,12 +12,13 @@ namespace SystemMonitor.Monitors.NeedsUpdates
     /// </summary>
     public class RblMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         //http://www.spamhaus.org/pbl/
         //http://www.spamhaus.org/lookup/
         //http://www.anti-abuse.org/multi-rbl-check/
         //https://rblwatcher.com/rbl-watcher-api#blacklistedip
         public string ServiceName => "RBL List";
-        public string ServiceDescription => "Monitors domain for existence in RBL lsits.";
+        public string ServiceDescription => "Monitors domain for existence in RBL lists.";
         public int Iteration { get; private set; }
 
         public string DisplayName => !string.IsNullOrEmpty(Name) ? Name : "RBL";
@@ -52,10 +54,10 @@ namespace SystemMonitor.Monitors.NeedsUpdates
                 if (parameters != null)
                 {
                     // load config values
-                    Name = parameters.Get("name");
-                    DnsServer = parameters.Get("dnsServer");
+                    Name = parameters.Get("Name");
+                    DnsServer = parameters.Get("DnsServer");
 
-                    rblServers = parameters.Get("rblServers");
+                    rblServers = parameters.Get("RblServers");
                     var serverList = rblServers.Split(new[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
                     RBLServers.Clear();
                     foreach (var server in serverList)
@@ -106,6 +108,16 @@ namespace SystemMonitor.Monitors.NeedsUpdates
 
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Name { get; set; }
+            public string? DnsServer { get; set; }
+            public string? RblServers { get; set; }
         }
 
         public void Dispose()

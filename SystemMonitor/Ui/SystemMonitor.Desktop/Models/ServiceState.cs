@@ -155,7 +155,7 @@ public class ServiceState : INotifyPropertyChanged, IEquatable<ServiceState>
             case Units.Pb:
                 return $"{value / 1000 / 1000 / 1000 / 1000 / 1000:n3}PB";
             case Units.Time:
-                return $"{value}ms";
+                return $"{value:n0}ms";
             case Units.Value:
                 return $"{value}";
             default:

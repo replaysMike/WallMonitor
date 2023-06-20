@@ -1,14 +1,19 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Security.Authentication;
 using System.Text;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public sealed class HttpMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 80;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "HTTP";
         public string ServiceDescription => "Monitors HTTP service response.";
         public int Iteration { get; private set; }
@@ -50,7 +55,7 @@ namespace SystemMonitor.Monitors
                 TimeoutMilliseconds = 5000;
             var response = HostResponse.Create();
             var startTime = DateTime.UtcNow;
-            var port = 0;
+            var port = DefaultPort;
             try
             {
                 HostUrl = host.Hostname;
@@ -94,7 +99,7 @@ namespace SystemMonitor.Monitors
                 {
                     var isSuccessful = false;
                     var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    var result = socket.BeginConnect(ipAddress, port > 0 ? port : 80, null, null);
+                    var result = socket.BeginConnect(ipAddress, port > 0 ? port : DefaultPort, null, null);
                     var complete = result.AsyncWaitHandle.WaitOne((int)TimeoutMilliseconds, true);
                     if (complete && socket.Connected)
                     {
@@ -165,6 +170,22 @@ namespace SystemMonitor.Monitors
                 response.IsUp = false;
             }
             return Task.FromResult(response);
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Url { get; set; }
+            public int? Port { get; set; } = DefaultPort;
+            public bool ResolveUrl { get; set; }
+            public string? Method { get; set; }
+            public string? UserAgent { get; set; }
+            public Dictionary<string, string>? Headers { get; set; }
+            public string? Body { get; set; }
+            [MatchTypeVariables("Value")]
+            public string? MatchType { get; set; }
         }
 
         private void ReceiveCallback(IAsyncResult result)

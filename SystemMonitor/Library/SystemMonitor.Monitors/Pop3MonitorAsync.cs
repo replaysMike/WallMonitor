@@ -1,14 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Text;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public class Pop3MonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
+        public const int DefaultPort = 110;
         public string ServiceName => "POP3";
         public string ServiceDescription => "Monitors POP3 service response and accessibility.";
         public int Iteration { get; private set; }
@@ -49,14 +53,14 @@ namespace SystemMonitor.Monitors
                 {
                     if (parameters.Any())
                     {
-                        var port = parameters.Get<int>("port", 110);
+                        var port = parameters.Get<int>("port", DefaultPort);
                         var username = parameters.Get<string>("username");
                         var password = parameters.Get<string>("password");
                         Username = username;
 
                         // initiate connection
                         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                        var result = socket.BeginConnect(address, port > 0 ? port : 110, null, null);
+                        var result = socket.BeginConnect(address, port > 0 ? port : DefaultPort, null, null);
                         var complete = result.AsyncWaitHandle.WaitOne((int)TimeoutMilliseconds, true);
                         if (complete && socket.Connected)
                         {
@@ -143,6 +147,16 @@ namespace SystemMonitor.Monitors
             {
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public int? Port { get; set; } = DefaultPort;
+            public string? Username { get; set; }
+            public string? Password { get; set; }
         }
 
         private void ReceiveCallback(IAsyncResult result)

@@ -2,24 +2,27 @@
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public class PerformanceCounterMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Windows;
         public string ServiceName => "PerformanceCounter";
         public string ServiceDescription => "Monitors performance counter value.";
         public int Iteration { get; private set; }
 
-        public string DisplayName => Category;
+        public string DisplayName => WmiCategory;
         public int MonitorId { get; set; }
         public long TimeoutMilliseconds { get; set; }
-        public string Category { get; set; } = "Processor";
+        public string WmiCategory { get; set; } = "Processor";
         public string Counter { get; set; } = "% Processor Time";
         public string Instance { get; set; } = "_Total";
-        public string ConfigurationDescription => $"Host: {Host} ({HostAddress})\nCounter: {Category}.{Counter}.{Instance}";
+        public string ConfigurationDescription => $"Host: {Host} ({HostAddress})\nCounter: {WmiCategory}.{Counter}.{Instance}";
         public string Host { get; set; }
         public IPAddress HostAddress { get; set; }
         public GraphType GraphType => GraphType.Value;
@@ -53,7 +56,7 @@ namespace SystemMonitor.Monitors
                 // Load monitor configuration parameters
                 if (parameters.Contains("Category"))
                 {
-                    Category = parameters.Get("Category") ?? string.Empty;
+                    WmiCategory = parameters.Get("Category") ?? string.Empty;
                     Counter = string.Empty;
                     Instance = string.Empty;
                 }
@@ -77,14 +80,14 @@ namespace SystemMonitor.Monitors
                         Scale = scale;
                 }
 
-                if (!string.IsNullOrEmpty(Category))
+                if (!string.IsNullOrEmpty(WmiCategory))
                 {
                     if (_performanceCounter == null)
                     {
                         if (!string.IsNullOrEmpty(Instance))
-                            _performanceCounter = new PerformanceCounter(Category, Counter, Instance, true);
+                            _performanceCounter = new PerformanceCounter(WmiCategory, Counter, Instance, true);
                         else
-                            _performanceCounter = new PerformanceCounter(Category, Counter, true);
+                            _performanceCounter = new PerformanceCounter(WmiCategory, Counter, true);
                     }
 
                     // if we are only asked to verify if the process exists, it is up
@@ -101,6 +104,20 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Category { get; set; }
+            public string? Counter { get; set; }
+            public string? Instance { get; set; }
+            public string? Range { get; set; }
+            public double? Scale { get; set; }
+            [MatchTypeVariables("Value")]
+            public string? MatchType { get; set; }
         }
 
     }

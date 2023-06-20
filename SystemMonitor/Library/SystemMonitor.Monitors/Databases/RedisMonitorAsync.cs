@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
+using System.Runtime.Serialization;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
@@ -10,6 +12,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public class RedisMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Database;
         private static ConnectionMultiplexer? _redis;
         public string ServiceName => "Redis";
         public string ServiceDescription => "Monitors Redis database with optional query execution.";
@@ -80,6 +83,17 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? ConnectionString { get; set; }
+            public string? Query { get; set; }
+            [MatchTypeVariables("Value", "Count")]
+            public string? MatchType { get; set; }
         }
 
         public void Dispose()

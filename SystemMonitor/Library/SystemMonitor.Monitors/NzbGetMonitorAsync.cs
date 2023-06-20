@@ -1,14 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Text;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public sealed class NzbGetMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 6789;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "NzbGet";
         public string ServiceDescription => "Monitors NzbGet server state.";
         public int Iteration { get; private set; }
@@ -43,14 +47,17 @@ namespace SystemMonitor.Monitors
                 TimeoutMilliseconds = 5000;
             var response = HostResponse.Create();
             var startTime = DateTime.UtcNow;
-            var port = 6789;
+            var hostUrl = host.Hostname;
+            var port = DefaultPort;
             var username = "";
             var password = "";
             try
             {
                 if (parameters.Any())
                 {
-                    port = parameters.Get<int>("port", 6789);
+                    if (hostUrl == null && parameters.Contains("Url"))
+                        hostUrl = new Uri(parameters.Get("Url"));
+                    port = parameters.Get<int>("Port", DefaultPort);
                     if (parameters.Contains("Username"))
                         username = parameters.Get<string>("Username");
                     if (parameters.Contains("Password"))
@@ -76,6 +83,8 @@ namespace SystemMonitor.Monitors
                 }
 
                 var ipAddress = host.Ip ?? Util.HostToIp(host);
+                if (Equals(ipAddress, IPAddress.None) && hostUrl != null)
+                    ipAddress = Util.GetIpFromHostname(hostUrl);
 
                 if (!Equals(ipAddress, IPAddress.None))
                 {
@@ -87,7 +96,7 @@ namespace SystemMonitor.Monitors
                     {
                         // connected! ask for a page
                         var header = $"{Method} / HTTP/1.1\r\n";
-                        header += $"Host: {host.Hostname?.OriginalString ?? ipAddress.ToString()}:{port}\r\n";
+                        header += $"Host: {hostUrl?.OriginalString ?? ipAddress.ToString()}:{port}\r\n";
                         if (!string.IsNullOrEmpty(username))
                         {
                             var authEncoded = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(username + ":" + password));
@@ -147,6 +156,20 @@ namespace SystemMonitor.Monitors
                 response.IsUp = false;
             }
             return Task.FromResult(response);
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Url { get; set; }
+            public int? Port { get; set; } = DefaultPort;
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public string? UserAgent { get; set; }
+            public Dictionary<string, string>? Headers { get; set; }
+            public string? Body { get; set; }
         }
 
         private void ReceiveCallback(IAsyncResult result)

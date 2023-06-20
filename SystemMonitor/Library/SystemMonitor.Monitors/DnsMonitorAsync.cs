@@ -1,12 +1,15 @@
 ﻿using System.Net;
+using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public class DnsMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "DNS";
         public string ServiceDescription => "Monitors DNS service query response.";
         public int Iteration { get; private set; }
@@ -124,6 +127,17 @@ namespace SystemMonitor.Monitors
                 _logger.LogError(ex, $"Exception thrown in '{nameof(DnsMonitorAsync)}'");
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Host { get; set; }
+            public string? Type { get; set; }
+            [MatchTypeVariables("Values", "Count")]
+            public string? MatchType { get; set; }
         }
 
         public void Dispose()

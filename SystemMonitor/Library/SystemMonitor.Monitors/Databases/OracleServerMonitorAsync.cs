@@ -3,6 +3,8 @@ using System.Data;
 using Oracle.ManagedDataAccess.Client;
 using SystemMonitor.Common;
 using SystemMonitor.Common.Sdk;
+using System.Runtime.Serialization;
+using SystemMonitor.Common.Models;
 
 namespace SystemMonitor.Monitors
 {
@@ -11,6 +13,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public class OracleServerMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Database;
         private string Database { get; set; } = string.Empty;
         private string? ServerVersion { get; set; }
         public string ServiceName => "Oracle";
@@ -127,6 +130,17 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? ConnectionString { get; set; }
+            public string? Query { get; set; }
+            [MatchTypeVariables("Value", "Count")]
+            public string? MatchType { get; set; }
         }
 
         public void Dispose()

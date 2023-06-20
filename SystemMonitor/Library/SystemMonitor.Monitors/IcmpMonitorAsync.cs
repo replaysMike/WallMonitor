@@ -1,13 +1,18 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.Serialization;
+using System.Security.Authentication;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public class IcmpMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "ICMP";
         public string ServiceDescription => "Monitors ICMP echo response time and availability.";
         public int Iteration { get; private set; }
@@ -37,8 +42,14 @@ namespace SystemMonitor.Monitors
             if (TimeoutMilliseconds <= 0)
                 TimeoutMilliseconds = 1000;
             var response = HostResponse.Create();
+            var matchType = "";
             try
             {
+                if (parameters.Any())
+                {
+                    if (parameters.Contains("MatchType"))
+                        matchType = parameters.Get<string>("MatchType");
+                }
                 var ping = new Ping();
 
                 // resolve the host IP (cached)
@@ -51,7 +62,10 @@ namespace SystemMonitor.Monitors
                 {
                     var reply = await ping.SendPingAsync(address, (int)TimeoutMilliseconds);
                     response.Units = Units.Time;
-                    response.IsUp = reply.Status == IPStatus.Success;
+                    if (string.IsNullOrEmpty(matchType))
+                        response.IsUp = reply.Status == IPStatus.Success;
+                    else
+                        response.IsUp = MatchComparer.Compare("Value", reply.RoundtripTime, matchType);
                     response.ResponseTime = TimeSpan.FromMilliseconds(reply.RoundtripTime);
                     response.Value = reply.RoundtripTime;
                     response.State = reply.RoundtripTime;
@@ -75,6 +89,15 @@ namespace SystemMonitor.Monitors
                 response.IsUp = false;
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            [MatchTypeVariables("Value")]
+            public string? MatchType { get; set; }
         }
     }
 }

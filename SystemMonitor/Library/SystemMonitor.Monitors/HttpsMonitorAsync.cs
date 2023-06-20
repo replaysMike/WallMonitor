@@ -2,16 +2,20 @@
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
 {
     public sealed class HttpsMonitorAsync : IMonitorAsync
     {
+        public const int DefaultPort = 443;
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "HTTPS";
         public string ServiceDescription => "Monitors HTTPS service response and certificate status.";
         public int Iteration { get; private set; }
@@ -58,7 +62,7 @@ namespace SystemMonitor.Monitors
             Socket? socket = null;
             SslStream? ssl = null;
             NetworkStream? networkStream = null;
-            var port = 0;
+            var port = DefaultPort;
             try
             {
                 HostUrl = host.Hostname;
@@ -68,9 +72,9 @@ namespace SystemMonitor.Monitors
                         HostUrl = new Uri(parameters.Get("Url"));
                     if (parameters.Contains("MatchType"))
                         MatchType = parameters.Get<string>("MatchType");
-                    port = parameters.Get<int>("port");
-                    AllowAnyCertificate = parameters.Get<bool>("allowAnyCertificate");
-                    AllowNameMismatch = parameters.Get<bool>("allowNameMismatch");
+                    port = parameters.Get<int>("Port");
+                    AllowAnyCertificate = parameters.Get<bool>("AllowAnyCertificate");
+                    AllowNameMismatch = parameters.Get<bool>("AllowNameMismatch");
                     ResolveUrl = parameters.Get<bool>("ResolveUrl");
                     if (parameters.Contains("Method"))
                         Method = parameters.Get<string>("Method");
@@ -92,7 +96,7 @@ namespace SystemMonitor.Monitors
                     }
                     if (parameters.Contains("Body"))
                         Body = parameters.Get<string?>("Body");
-                    var protocolStr = parameters.Get("protocol");
+                    var protocolStr = parameters.Get("Protocol");
                     Protocol = SslProtocols.None;
                     if (!string.IsNullOrEmpty(protocolStr))
                     {
@@ -111,7 +115,7 @@ namespace SystemMonitor.Monitors
                 {
                     var isSuccessful = false;
                     socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    var result = socket.BeginConnect(ipAddress, port > 0 ? port : 443, null, null);
+                    var result = socket.BeginConnect(ipAddress, port > 0 ? port : DefaultPort, null, null);
                     var complete = result.AsyncWaitHandle.WaitOne((int)TimeoutMilliseconds, true);
                     if (complete && socket.Connected)
                     {
@@ -203,6 +207,25 @@ namespace SystemMonitor.Monitors
                 socket?.Dispose();
             }
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Url { get; set; }
+            public int? Port { get; set; } = DefaultPort;
+            public bool ResolveUrl { get; set; }
+            public string? Method { get; set; }
+            public string? UserAgent { get; set; }
+            public Dictionary<string, string>? Headers { get; set; }
+            public string? Body { get; set; }
+            public SslProtocols Protocol { get; set; } = SslProtocols.Tls12;
+            public bool AllowAnyCertificate { get; set; } = true;
+            public bool AllowNameMismatch { get; set; } = true;
+            [MatchTypeVariables("Value")]
+            public string? MatchType { get; set; }
         }
 
         private X509Certificate ValidateLocalServerCertificate(object obj1, string str1, X509CertificateCollection? col1, X509Certificate? cert1, string[] args)

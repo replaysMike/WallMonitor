@@ -1,8 +1,10 @@
 ﻿#if OS_WINDOWS
 using System.Net;
+using System.Runtime.Serialization;
 using System.ServiceProcess;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 using SystemMonitor.Monitors.Windows;
 
@@ -13,6 +15,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class WindowsServiceMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Windows;
         public string ServiceName => "Windows Service";
         public string ServiceDescription => "Monitors Windows service status.";
         public int Iteration { get; private set; }
@@ -118,6 +121,17 @@ namespace SystemMonitor.Monitors
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Service { get; set; }
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public string? Domain { get; set; }
         }
     }
 }

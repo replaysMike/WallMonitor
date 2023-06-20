@@ -3,9 +3,11 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors
@@ -15,6 +17,7 @@ namespace SystemMonitor.Monitors
     /// </summary>
     public sealed class SmtpMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "SMTP";
         public string ServiceDescription => "Monitors SMTP service response and accessibility.";
         public int Iteration { get; private set; }
@@ -335,6 +338,18 @@ namespace SystemMonitor.Monitors
         public void Dispose()
         {
 
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Hostname { get; set; }
+            public int? Port { get; set; } = 25;
+            public string? Username { get; set; }
+            public string? Password { get; set; }
+            public bool Tls { get; set; }
         }
 
         private class SocketObject

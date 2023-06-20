@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using SystemMonitor.Common;
+using SystemMonitor.Common.Models;
 using SystemMonitor.Common.Sdk;
 
 namespace SystemMonitor.Monitors.NeedsUpdates
@@ -10,6 +12,7 @@ namespace SystemMonitor.Monitors.NeedsUpdates
     /// </summary>
     public sealed class NetworkFileMonitorAsync : IMonitorAsync
     {
+        public MonitorCategory Category => MonitorCategory.Application;
         public string ServiceName => "Network File";
         public string ServiceDescription => "Monitors existence of a network accessible file.";
         public int Iteration { get; private set; }
@@ -44,7 +47,7 @@ namespace SystemMonitor.Monitors.NeedsUpdates
             {
                 if (parameters != null)
                 {
-                    Name = parameters.Get("name");
+                    Name = parameters.Get("Name");
                 }
 
             }
@@ -54,6 +57,14 @@ namespace SystemMonitor.Monitors.NeedsUpdates
             }
 
             return response;
+        }
+
+        public object GenerateConfigurationTemplate() => new ConfigurationContract();
+
+        [DataContract]
+        private class ConfigurationContract
+        {
+            public string? Name { get; set; }
         }
     }
 }
