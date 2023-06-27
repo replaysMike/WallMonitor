@@ -29,7 +29,7 @@ Figure 2. Servers and services state are clearly indicated
 
 ## Monitors currently supported
 
-There are many built-in monitors that come with SystemMonitor. If you feel an important monitor is missing, create a [Feature Request](https://github.com/replaysMike/SystemMonitor/issues) or contribute by submitting a pull-request.
+There are many built-in monitors that come with SystemMonitor. If you feel an important monitor is missing, create a [Feature Request](https://github.com/replaysMike/SystemMonitor/discussions/categories/feature-requests) or contribute by submitting a pull-request.
 
 * TcpPort
 * Udp Multicast & Unicast message monitoring
