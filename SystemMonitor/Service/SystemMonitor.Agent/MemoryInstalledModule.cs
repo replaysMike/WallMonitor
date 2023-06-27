@@ -2,6 +2,7 @@
 #if OS_LINUX
 using System.Diagnostics;
 #endif
+
 #if OS_WINDOWS
 using SystemMonitor.Agent.Windows;
 using static SystemMonitor.Agent.Windows.Win32;

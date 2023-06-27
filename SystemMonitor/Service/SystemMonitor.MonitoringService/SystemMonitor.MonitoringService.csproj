@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <RuntimeIdentifiers>win10-x64;linux-arm;linux-arm64;linux-x64;osx.10.12-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
-    <PlatformTarget>x64</PlatformTarget>
+    <!--<PlatformTarget>x64</PlatformTarget>-->
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-SystemMonitor.MonitoringService-7e6005b2-83c1-42c7-97c6-0555968d4c7e</UserSecretsId>
@@ -48,4 +48,16 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win10-x64'">
+    <DefineConstants>OS_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm' OR '$(RuntimeIdentifier)' == 'linux-arn64' OR '$(RuntimeIdentifier)' == 'linux-x64' OR '$(RuntimeIdentifier)' == 'ubuntu.14.04-x64'">
+    <DefineConstants>OS_LINUX</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx.10.12-x64'">
+    <DefineConstants>OS_MAC</DefineConstants>
+  </PropertyGroup>
 </Project>

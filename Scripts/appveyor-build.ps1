@@ -6,7 +6,6 @@ Write-Host "Building $env:APPVEYOR_BUILD_VERSION" -ForegroundColor magenta
 
 Write-Host "Installing build dependencies..." -ForegroundColor green
 choco install -y innosetup
-Install-Product node ''
 
 Write-Host "Checking versions..." -ForegroundColor green
 Write-Host "Dotnet" -ForegroundColor cyan
@@ -15,7 +14,8 @@ Write-Host "Tar" -ForegroundColor cyan
 tar --version
 
 Write-Host "Restoring packages..." -ForegroundColor green
-dotnet restore $project
+dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+dotnet restore -s https://api.nuget.org/v3/index.json $project
 if ($LastExitCode -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "Building..." -ForegroundColor green

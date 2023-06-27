@@ -1,10 +1,9 @@
-﻿#if OS_LINUX
+﻿using SystemMonitor.Common.IO;
+#if OS_LINUX
 using System.Diagnostics;
-using SystemMonitor.Common.IO;
 #endif
 
 #if OS_WINDOWS
-using SystemMonitor.Common.IO;
 using SystemMonitor.Agent.Windows;
 using static SystemMonitor.Agent.Windows.Win32;
 #endif
