@@ -1,11 +1,43 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using SystemMonitor.Desktop.Models;
+using SystemMonitor.Resources;
 
 namespace SystemMonitor.Desktop.Controls
 {
     public class ServerHealthBar : Control
     {
+        public static readonly DirectProperty<ServerHealthBar, byte> ImageThemeProperty =
+            AvaloniaProperty.RegisterDirect<ServerHealthBar, byte>(nameof(ImageTheme), o => o.ImageTheme, (o, value) => o.ImageTheme = value, 1);
+
+        public static readonly DirectProperty<ServerHealthBar, byte> ImageSizeProperty =
+            AvaloniaProperty.RegisterDirect<ServerHealthBar, byte>(nameof(ImageSize), o => o.ImageSize, (o, value) => o.ImageSize = value, 1);
+
+        private byte _imageTheme = UiConstants.MinTheme;
+        public byte ImageTheme
+        {
+            get => _imageTheme;
+            set
+            {
+                if (value > UiConstants.MaxTheme) value = UiConstants.MaxTheme;
+                SetAndRaise(ImageThemeProperty, ref _imageTheme, value);
+            }
+        }
+
+        private byte _imageSize = UiConstants.MinImageSize;
+        public byte ImageSize
+        {
+            get => _imageSize;
+            set
+            {
+                if (value > UiConstants.MaxImageSize) value = UiConstants.MaxImageSize;
+                SetAndRaise(ImageSizeProperty, ref _imageSize, value);
+            }
+        }
+
         private readonly LinearGradientBrush _brush;
         public ServerHealthBar()
         {
@@ -17,12 +49,15 @@ namespace SystemMonitor.Desktop.Controls
 
         public override void Render(DrawingContext context)
         {
-            _brush.GradientStops = new GradientStops
+            if (_imageSize > 0 && _imageTheme > 0)
             {
-                new (Color.FromArgb(255,0,150,0), 0),
-                new (Color.FromArgb(255, 0, 200, 0), 1),
-            };
-            context.DrawRectangle(_brush, null, new Rect(0, 0, Bounds.Width, Bounds.Height));
+                _brush.GradientStops = new GradientStops
+                {
+                    new(Color.FromArgb(255, 0, 150, 0), 0),
+                    new(Color.FromArgb(255, 0, 200, 0), 1),
+                };
+                context.DrawRectangle(_brush, null, new Rect(0, 0, Bounds.Width, Bounds.Height));
+            }
         }
     }
 }

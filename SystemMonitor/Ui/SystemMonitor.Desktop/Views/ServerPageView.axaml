@@ -58,18 +58,21 @@
               <StackPanel Classes.isDisabled="{Binding !IsEnabled}">
                 <controls:ServerImage 
                   Width="{Binding ViewModel.Dimensions.ServerSize.Width, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=300}" 
-                  Height="{Binding ViewModel.Dimensions.ServerSize.Height, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=120}" 
+                  Height="{Binding ViewModel.Dimensions.ServerSize.Height, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=120}"
                   Margin="0 0 0 5" 
                   ImageTheme="{Binding ImageTheme}" 
                   ImageSize="{Binding ImageSize}" 
                   IsChecking="{Binding IsChecking}" 
                   CurrentState="{Binding CurrentState}" 
+                  Services="{Binding Services}"
                 />
-                <controls:ServerHealthBar Width="{Binding ViewModel.Dimensions.ServerSize.Width, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=300}" Height="5" />
+                <controls:ServerHealthBar Width="{Binding ViewModel.Dimensions.ServerSize.Width, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=300}" Height="5" ImageTheme="{Binding ImageTheme}" ImageSize="{Binding ImageSize}" />
                 <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Margin="0 2 0 0" />
+
+                <!-- Display all of the services -->
                 <ListBox 
                   Width="{Binding ViewModel.Dimensions.ServerSize.Width, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=300}" 
-                  Height="{Binding ViewModel.Dimensions.TextHeight, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=100}" 
+                  Height="{Binding ViewModel.Dimensions.TextHeight, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, FallbackValue=100}"
                   Margin="0 5 0 0" 
                   ItemsSource="{Binding Services}" 
                   Background="Transparent" 
@@ -78,7 +81,7 @@
                   VerticalAlignment="Top">
                   <ListBox.Styles>
                     <Style Selector="ListBoxItem">
-                      <Setter Property="Padding" Value="5 0 0 0" />
+                      <Setter Property="Padding" Value="5 0 5 0" />
                       <Setter Property="Margin" Value="0" />
                     </Style>
                     <Style Selector="TextBlock">

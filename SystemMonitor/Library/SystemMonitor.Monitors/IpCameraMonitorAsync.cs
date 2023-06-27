@@ -229,19 +229,23 @@ namespace SystemMonitor.Monitors
             so.AllDone.WaitOne(250);
             // using an optimized routine to grab rtsp status code instead of using string split(s)
             var responseMessage = so.Sb.ToString();
-            var eol = responseMessage.IndexOf("\r\n", 8, StringComparison.Ordinal);
-            var line1 = responseMessage.Substring(0, eol);
-            var soc = line1.IndexOf(" ", StringComparison.Ordinal);
-            if (soc >= 0 && line1.Length > soc)
+            if (responseMessage.Length > 8)
             {
-                soc += 1;
-                var responseCodeStr = line1.Substring(soc, 3);
-                if (int.TryParse(responseCodeStr, out responseCode))
+                var eol = responseMessage.IndexOf("\r\n", 8, StringComparison.Ordinal);
+                var line1 = responseMessage.Substring(0, eol);
+                var soc = line1.IndexOf(" ", StringComparison.Ordinal);
+                if (soc >= 0 && line1.Length > soc)
                 {
-                    //Debug.WriteLine($"RX: {responseMessage}");
-                    return responseMessage;
+                    soc += 1;
+                    var responseCodeStr = line1.Substring(soc, 3);
+                    if (int.TryParse(responseCodeStr, out responseCode))
+                    {
+                        //Debug.WriteLine($"RX: {responseMessage}");
+                        return responseMessage;
+                    }
                 }
             }
+
             return string.Empty;
         }
 

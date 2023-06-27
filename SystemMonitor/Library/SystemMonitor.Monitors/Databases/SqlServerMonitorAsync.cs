@@ -41,6 +41,7 @@ namespace SystemMonitor.Monitors
                 TimeoutMilliseconds = 5000;
 
             var response = HostResponse.Create();
+            response.Units = Units.Value;
             try
             {
                 var startTime = DateTime.UtcNow;

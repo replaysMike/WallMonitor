@@ -1,10 +1,7 @@
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Selection;
 using LightInject;
 using System;
-using System.Diagnostics;
-using Avalonia;
-using SystemMonitor.Desktop.Models;
 using SystemMonitor.Desktop.ViewModels;
 
 namespace SystemMonitor.Desktop.Views

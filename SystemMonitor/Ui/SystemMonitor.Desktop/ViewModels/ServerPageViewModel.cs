@@ -20,9 +20,9 @@ namespace SystemMonitor.Desktop.ViewModels
 
         public ObservableCollection<Server> Servers { get; set; }
 
-        public static SpriteSize GlobalDimensions = new SpriteSize(380, 185, 14, 8, 30, new Thickness(0));
+        public static SpriteSize GlobalDimensions = new SpriteSize(UiConstants.ServerFrameWidth, UiConstants.ServerFrameHeight, UiConstants.ServerFontSize1, UiConstants.ServerFontSize2, UiConstants.ServerTextHeight, new Thickness(0));
 
-        private SpriteSize _dimensions = new SpriteSize(380, 185, 14, 8, 30, new Thickness(0));
+        private SpriteSize _dimensions = new SpriteSize(UiConstants.ServerFrameWidth, UiConstants.ServerFrameHeight, UiConstants.ServerFontSize1, UiConstants.ServerFontSize2, UiConstants.ServerTextHeight, new Thickness(0));
         public SpriteSize Dimensions
         {
             get => _dimensions;
@@ -113,13 +113,13 @@ namespace SystemMonitor.Desktop.ViewModels
             {
                 default:
                 case UiSize.Small:
-                    return new SpriteSize(260, 120, 14, 8, 30, new Thickness(0));
+                    return new SpriteSize(UiConstants.ServerFrameWidth * 0.68, UiConstants.ServerFrameHeight * 0.68, 14, 8, UiConstants.ServerTextHeight * 0.68, new Thickness(0));
                 case UiSize.Normal:
-                    return new SpriteSize(380, 185, 18, 12, 75, new Thickness(10));
+                    return new SpriteSize(UiConstants.ServerFrameWidth, UiConstants.ServerFrameHeight, UiConstants.ServerFontSize1, UiConstants.ServerFontSize2, UiConstants.ServerTextHeight, new Thickness(UiConstants.ServerMargin));
                 case UiSize.Large:
-                    return new SpriteSize(520, 250, 24, 16, 75, new Thickness(20));
+                    return new SpriteSize(UiConstants.ServerFrameWidth * 1.37, UiConstants.ServerFrameHeight * 1.37, 24, 16, UiConstants.ServerTextHeight * 1.37, new Thickness(UiConstants.ServerMargin * 2));
                 case UiSize.Huge:
-                    return new SpriteSize(650, 300, 36, 18, 60, new Thickness(20));
+                    return new SpriteSize(UiConstants.ServerFrameWidth * 1.71, UiConstants.ServerFrameHeight * 1.71, 36, 18, UiConstants.ServerTextHeight * 1.71, new Thickness(UiConstants.ServerMargin * 2));
             }
         }
     }

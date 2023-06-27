@@ -60,7 +60,8 @@ namespace SystemMonitor.Monitors
 
             var response = HostResponse.Create();
             response.Units = Units.Time;
-            response.ResponseTime = TimeSpan.FromMilliseconds(_packetTimesBetweenChecks.Average(x => x.TotalMilliseconds));
+            if (_packetTimesBetweenChecks.Any())
+                response.ResponseTime = TimeSpan.FromMilliseconds(_packetTimesBetweenChecks.Average(x => x.TotalMilliseconds));
             _packetTimesBetweenChecks.Clear();
             var matchType = "";
             try

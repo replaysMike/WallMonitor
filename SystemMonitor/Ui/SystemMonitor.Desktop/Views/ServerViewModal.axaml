@@ -5,7 +5,7 @@
              xmlns:viewModels="clr-namespace:SystemMonitor.Desktop.ViewModels"
              xmlns:controls="clr-namespace:SystemMonitor.Desktop.Controls"
              xmlns:views="clr-namespace:SystemMonitor.Desktop.Views"
-             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="200"
+             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="200"
              x:Class="SystemMonitor.Desktop.Views.ServerViewModal">
   <Design.DataContext>
     <viewModels:ServerViewModalModel/>
@@ -135,7 +135,6 @@
             <ListBox Name="ServiceList" 
                      SelectionMode="Single" 
                      SelectedIndex="0"
-                     Width="300" 
                      Height="30" 
                      Margin="0 5 0 0" 
                      ItemsSource="{Binding Server.Services, FallbackValue=[]}" 
