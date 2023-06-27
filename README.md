@@ -58,6 +58,7 @@ There are many built-in monitors that come with Wall Monitor. If you feel an imp
 
 ## Remaining Upcoming Features for 2023
 
+- [ ] Philips Hue Integration
 - [ ] PRTG Integration
 - [ ] Custom sprite loading for your own look
 - [ ] SNMP Trap Receiving
