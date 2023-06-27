@@ -1,14 +1,14 @@
-# SystemMonitor
-SystemMonitor is a graphical open-source network monitoring application that is cross-platform. It was designed to accommodate wall based or multiple displays used for centralized monitoring of many servers & services.
+# Wall Monitor
+Wall Monitor is a graphical open-source network monitoring application that is cross-platform. It was designed to accommodate wall based or multiple displays used for centralized monitoring of many servers & services.
 
 ## Screenshots
 
-![image](https://github.com/replaysMike/SystemMonitor/assets/2531058/746a06c8-1abd-49fb-85ff-ea8a86987e6f)
+![image](https://github.com/replaysMike/WallMonitor/assets/2531058/746a06c8-1abd-49fb-85ff-ea8a86987e6f)
 
 Figure 1. Multi-server and service state monitoring graphically displayed
 
 
-![image](https://github.com/replaysMike/SystemMonitor/assets/2531058/52ddc59d-978f-42e6-8ea4-c09ae368e089)
+![image](https://github.com/replaysMike/WallMonitor/assets/2531058/52ddc59d-978f-42e6-8ea4-c09ae368e089)
 
 Figure 2. Servers and services state are clearly indicated
 
@@ -29,7 +29,7 @@ Figure 2. Servers and services state are clearly indicated
 
 ## Monitors currently supported
 
-There are many built-in monitors that come with SystemMonitor. If you feel an important monitor is missing, create a [Feature Request](https://github.com/replaysMike/SystemMonitor/discussions/categories/feature-requests) or contribute by submitting a pull-request.
+There are many built-in monitors that come with Wall Monitor. If you feel an important monitor is missing, create a [Feature Request](https://github.com/replaysMike/WallMonitor/discussions/categories/feature-requests) or contribute by submitting a pull-request.
 
 * TcpPort
 * Udp Multicast & Unicast message monitoring
@@ -64,4 +64,4 @@ There are many built-in monitors that come with SystemMonitor. If you feel an im
 - [ ] Enhanced full screen animations
 - [ ] Failover monitoring
 
-For more information about getting started and configuring, see the [Wiki](https://github.com/replaysMike/SystemMonitor/wiki)
+For more information about getting started and configuring, see the [Wiki](https://github.com/replaysMike/WallMonitor/wiki)
