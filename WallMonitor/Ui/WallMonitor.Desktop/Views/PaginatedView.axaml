@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+             xmlns:views="clr-namespace:WallMonitor.Desktop.Views"
+             xmlns:viewModels="clr-namespace:WallMonitor.Desktop.ViewModels"
+             xmlns:controls="clr-namespace:WallMonitor.Desktop.Controls"
+             x:Class="WallMonitor.Desktop.Views.PaginatedView">
+  <Design.DataContext>
+    <viewModels:MainWindowViewModel/>
+  </Design.DataContext>
+  <Grid RowDefinitions="*, Auto">
+    <!-- Render the page of servers based on current page -->
+    <Carousel Grid.Row="0" Name="Carousel" ItemsSource="{Binding Pages}" SelectedIndex="{Binding CurrentPage}">
+      <Carousel.PageTransition>
+        <PageSlide Duration="0.5" Orientation="Horizontal" SlideOutEasing="QuadraticEaseOut" SlideInEasing="QuadraticEaseIn" />
+      </Carousel.PageTransition>
+      <Carousel.ItemTemplate>
+        <DataTemplate>
+          <views:ServerPageView DataContext="{Binding}" HorizontalAlignment="Center" />
+        </DataTemplate>
+      </Carousel.ItemTemplate>
+    </Carousel>
+
+    <!-- Render the pagination page selector control -->
+    <ItemsControl Grid.Row="1" 
+                  ItemsSource="{Binding Pages}" 
+                  Height="{Binding PaginationHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:PaginatedView}} }">
+      <ItemsControl.Styles>
+        <Style Selector="Button:pointerover">
+          <Setter Property="Cursor" Value="Hand" />
+          <Setter Property="RenderTransform" Value="scale(0.9)"/>
+        </Style>
+        <Style Selector="Button:pressed">
+          <Setter Property="RenderTransform" Value="scale(0.8)"/>
+        </Style>
+        <Style Selector="Button">
+          <Setter Property="RenderTransform" Value="scale(1)"/>
+        </Style>
+        <Style Selector="Path">
+          <Setter Property="Fill" Value="DarkGreen" />
+        </Style>
+        <Style Selector="Path.isCurrentPage">
+          <Setter Property="Fill" Value="Lime" />
+        </Style>
+        <Style Selector="Path.hasFailures">
+          <Setter Property="Fill" Value="DarkRed" />
+        </Style>
+        <Style Selector="Path.hasFailuresAndisCurrentPage">
+          <Setter Property="Fill" Value="Red" />
+        </Style>
+      </ItemsControl.Styles>
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10" />
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button DataContext="{Binding}" Click="Navigation_Click" PointerEntered="Navigation_Entered" PointerExited="Navigation_Exited">
+            <Button.Transitions>
+              <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Easing="BounceEaseOut" Duration="0:0:0.2" />
+              </Transitions>
+            </Button.Transitions>
+            <Path 
+                Classes.isCurrentPage="{Binding IsCurrentPage}"
+                Classes.hasFailures="{Binding HasFailures}" 
+                Classes.hasFailuresAndisCurrentPage="{Binding HasFailuresAndIsCurrentPage}"
+                Data="M5,5 m -5, 0 a 5,5 0 1,0 10,0 a 5,5 0 1,0 -10,0">
+            </Path>
+          </Button>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </Grid>
+</UserControl>
+

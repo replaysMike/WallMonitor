@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <RuntimeIdentifiers>win10-x64;linux-arm;linux-arm64;linux-x64;osx.10.12-x64;ubuntu.14.04-x64</RuntimeIdentifiers>
+    <!--<PlatformTarget>x64</PlatformTarget>-->
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-WallMonitor.MonitoringService-7e6005b2-83c1-42c7-97c6-0555968d4c7e</UserSecretsId>
+    <OutputType>exe</OutputType>
+    <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <!--<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LightInject" Version="6.6.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="7.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.1.4" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+    <PackageReference Include="WallMonitor.Licensing" Version="1.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\WallMonitor.Common\WallMonitor.Common.csproj" />
+    <ProjectReference Include="..\..\Library\WallMonitor.Monitors\WallMonitor.Monitors.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Monitors\Agent.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win10-x64'">
+    <DefineConstants>OS_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm' OR '$(RuntimeIdentifier)' == 'linux-arn64' OR '$(RuntimeIdentifier)' == 'linux-x64' OR '$(RuntimeIdentifier)' == 'ubuntu.14.04-x64'">
+    <DefineConstants>OS_LINUX</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx.10.12-x64'">
+    <DefineConstants>OS_MAC</DefineConstants>
+  </PropertyGroup>
+</Project>

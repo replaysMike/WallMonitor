@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WallMonitor.Desktop.Views.ToastContainer">
+  
+  <ItemsControl ItemsSource="{Binding Toasts}" Margin="10" VerticalAlignment="Bottom">
+    <ItemsControl.ItemsPanel>
+      <ItemsPanelTemplate>
+        <StackPanel Margin="0" />
+      </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Border Name="ToastContainer1" 
+                BorderBrush="{Binding Border}" 
+                Background="{Binding Background}"
+                BoxShadow="4 5 20 1 #99000000"
+                BorderThickness="1" 
+                CornerRadius="4" 
+                Margin="4" 
+                Padding="16" 
+                Opacity="{Binding Opacity}" 
+                DataContext="{Binding}" 
+                MinWidth="200" 
+                MaxWidth="500" 
+                MinHeight="50" 
+                MaxHeight="90" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Bottom" >
+          <Border.RenderTransform>
+            <ScaleTransform ScaleY="{Binding Scale}" />
+          </Border.RenderTransform>
+          <TextBlock Text="{Binding Message}" HorizontalAlignment="Center" VerticalAlignment="Center" MaxLines="3" TextAlignment="Center" TextWrapping="Wrap" />
+        </Border>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+  
+</UserControl>

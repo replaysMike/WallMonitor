@@ -9,19 +9,19 @@ body:
         Thank you for reporting an issue :pray: - we live for good bug reports.
 
         Before submitting a new bug/issue, please check the links below to see if there is a solution or question posted there already:
-        - System Monitor [Discussions](https://github.com/replaysMike/SystemMonitor/discussions)
-        - System Monitor [Open Issues](https://github.com/replaysMike/SystemMonitor/issues?q=is%3Aopen+is%3Aissue)
-        - System Monitor [Closed Issues](https://github.com/replaysMike/SystemMonitor/issues?q=is%3Aissue+is%3Aclosed)
+        - System Monitor [Discussions](https://github.com/replaysMike/WallMonitor/discussions)
+        - System Monitor [Open Issues](https://github.com/replaysMike/WallMonitor/issues?q=is%3Aopen+is%3Aissue)
+        - System Monitor [Closed Issues](https://github.com/replaysMike/WallMonitor/issues?q=is%3Aissue+is%3Aclosed)
 
         The more information you fill in, the better the community can help you.
 
   - type: input
-    id: systemmonitor-version
+    id: WallMonitor-version
     attributes:
       label: System Monitor version
       description: |
         - Please let us know the exact version you installed. If you are using a version other than latest, the bug may have already been solved. 
-        - The latest version is [![GitHub release](https://img.shields.io/github/release/replaysMike/SystemMonitor.svg)](https://GitHub.com/replaysMike/SystemMonitor/releases/)
+        - The latest version is [![GitHub release](https://img.shields.io/github/release/replaysMike/WallMonitor.svg)](https://GitHub.com/replaysMike/WallMonitor/releases/)
       placeholder: |
         e.g. v1.0.5
     validations:

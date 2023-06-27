@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:WallMonitor.Desktop.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:WallMonitor.Desktop.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="460"
+        Width="1000" Height="800"
+        xmlns:controls="using:WallMonitor.Desktop.Controls" 
+        x:Class="WallMonitor.Desktop.Views.MainWindow"
+        Title="System Monitor"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        Name="MainWindow1"
+        Icon="/Assets/icon.ico">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+  
+  <Window.Styles>
+    <Style Selector="controls|AudioMuteButton">
+      <Setter Property="RenderTransform" Value="scale(1)"/>
+      <Setter Property="Opacity" Value="0.2" />
+    </Style>
+    <Style Selector="controls|AudioMuteButton:pointerover">
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Opacity" Value="1" />
+      <Setter Property="RenderTransform" Value="scale(0.8)"/>
+    </Style>
+    <Style Selector="controls|AudioMuteButton:pressed">
+      <Setter Property="RenderTransform" Value="scale(0.6)"/>
+    </Style>
+  </Window.Styles>
+
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+            BackgroundSource="Digger"
+            TintColor="Black"
+            TintOpacity="1"
+            MaterialOpacity="0.75" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <Panel Margin="0 25 0 0" Name="ControlPanel">
+      <controls:AnimatedBackgroundCanvas Name="BackgroundCanvas" />
+      <views:PaginatedView Name="PaginatedView1" DataContext="{Binding}" />
+      <views:ToastContainer Name="ToastContainer1" Margin="0 0 0 25" />
+      <controls:AudioMuteButton Name="AudioMuteButton1" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" Height="100">
+        <controls:AudioMuteButton.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+            <TransformOperationsTransition Property="RenderTransform" Easing="BounceEaseOut" Duration="0:0:0.2" />
+          </Transitions>
+        </controls:AudioMuteButton.Transitions>
+      </controls:AudioMuteButton>
+      <controls:StatusCountButton Name="StatusCountButton1" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Height="100">
+        <controls:StatusCountButton.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+            <TransformOperationsTransition Property="RenderTransform" Easing="BounceEaseOut" Duration="0:0:0.2" />
+          </Transitions>
+        </controls:StatusCountButton.Transitions>
+      </controls:StatusCountButton>
+      <Border Margin="0" Name="WaitOverlay" Background="Black" Opacity="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <views:Loader />
+      </Border>
+      <views:ConsoleWindow Name="ConsoleWindowOverlay" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="0">
+        <views:ConsoleWindow.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Height" Duration="0:0:0.3" Easing="QuadraticEaseOut"/>
+          </Transitions>
+        </views:ConsoleWindow.Transitions>
+      </views:ConsoleWindow>
+    </Panel>
+  </Panel>
+
+</Window>
