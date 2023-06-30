@@ -33,6 +33,14 @@ Figure 2. Servers and services state are clearly indicated
 * Support for both Windows & Unix operating systems
 * SDK to write your own customized monitors
 
+## Getting Started
+
+See the [Getting Started Wiki](https://github.com/replaysMike/WallMonitor/wiki/Getting-Started) which explains the architecture and how to configure each application.
+
+* There are 3 applications: Desktop, Monitoring Service, and Agent.
+* [Download the latest release](https://github.com/replaysMike/WallMonitor/releases) for your platform.
+* Configure the `appsettings.json` for the [Desktop](https://github.com/replaysMike/WallMonitor/wiki/Desktop-Configuration), [Monitoring Service](https://github.com/replaysMike/WallMonitor/wiki/Monitoring-Service-Configuration), and optionally the [Agent](https://github.com/replaysMike/WallMonitor/wiki/Agent-Configuration)
+
 ## Monitors currently supported
 
 There are many built-in monitors that come with Wall Monitor. If you feel an important monitor is missing, create a [Feature Request](https://github.com/replaysMike/WallMonitor/discussions/categories/feature-requests) or contribute by submitting a pull-request.
