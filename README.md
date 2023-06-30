@@ -1,4 +1,10 @@
 # Wall Monitor
+[![GitHub release](https://img.shields.io/github/release/replaysMike/WallMonitor.svg)](https://GitHub.com/replaysMike/WallMonitor/releases/)
+[![GitHub commits](https://img.shields.io/github/commits-since/replaysMike/WallMonitor/v1.0.2.svg)](https://GitHub.com/replaysMike/WallMonitor/commit/)
+[![Github all releases](https://img.shields.io/github/downloads/replaysMike/WallMonitor/total.svg)](https://GitHub.com/replaysMike/WallMonitor/releases/)
+[![GitHub contributors](https://img.shields.io/github/contributors/replaysMike/WallMonitor.svg)](https://GitHub.com/replaysMike/WallMonitor/graphs/contributors/)
+[![GitHub license](https://img.shields.io/github/license/replaysMike/WallMonitor.svg)](https://github.com/replaysMike/WallMonitor/blob/master/LICENSE)
+
 Wall Monitor is a graphical open-source network monitoring application that is cross-platform. It was designed to accommodate wall based or multiple displays used for centralized monitoring of many servers & services.
 
 ## Screenshots
